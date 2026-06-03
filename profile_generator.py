@@ -48,7 +48,7 @@ def _random_phone() -> str:
 
 def _random_email(first: str, last: str) -> str:
     suffix = secrets.token_hex(4)
-    return f"{first.lower()}.{last.lower()}.{suffix}@yopmail.com"
+    return f"no_mfa_{first.lower()}_{last.lower()}_{suffix}@yopmail.com"
 
 
 _STATE_POSTCODE_RANGES: dict[str, tuple[int, int]] = {
