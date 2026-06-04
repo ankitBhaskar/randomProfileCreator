@@ -53,11 +53,7 @@
           <span class="value email-val">{{ p.email }}</span>
           @if (copiedField() === 'email') { <span class="copied-badge">Copied!</span> }
         </div>
-        <div class="field" (click)="copy(p.phone_number, 'phone')" title="Click to copy">
-          <span class="label">Phone</span>
-          <span class="value">{{ p.phone_number }}</span>
-          @if (copiedField() === 'phone') { <span class="copied-badge">Copied!</span> }
-        </div>
+
       </div>
 
 
