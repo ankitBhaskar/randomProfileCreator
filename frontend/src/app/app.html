@@ -60,35 +60,6 @@
         </div>
       </div>
 
-      <!-- Address -->
-      <div class="section-title">Address</div>
-      <div class="field-grid">
-        <div class="field full" (click)="copy(p.address_line_1, 'addr')" title="Click to copy">
-          <span class="label">Street</span>
-          <span class="value">{{ p.address_line_1 }}</span>
-          @if (copiedField() === 'addr') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.suburb, 'suburb')" title="Click to copy">
-          <span class="label">Suburb</span>
-          <span class="value">{{ p.suburb }}</span>
-          @if (copiedField() === 'suburb') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.state, 'state')" title="Click to copy">
-          <span class="label">State</span>
-          <span class="value">{{ p.state }}</span>
-          @if (copiedField() === 'state') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.postcode, 'pc')" title="Click to copy">
-          <span class="label">Postcode</span>
-          <span class="value">{{ p.postcode }}</span>
-          @if (copiedField() === 'pc') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.country, 'country')" title="Click to copy">
-          <span class="label">Country</span>
-          <span class="value">{{ p.country }}</span>
-          @if (copiedField() === 'country') { <span class="copied-badge">Copied!</span> }
-        </div>
-      </div>
 
       <!-- Identity -->
       <div class="section-title">Identity Documents</div>
@@ -107,11 +78,6 @@
           <span class="label">🏥 Medicare</span>
           <span class="value mono">{{ p.medicare_number }}</span>
           @if (copiedField() === 'medicare') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.tax_file_number, 'tfn')" title="Click to copy">
-          <span class="label">📋 Tax File Number</span>
-          <span class="value mono">{{ p.tax_file_number }}</span>
-          @if (copiedField() === 'tfn') { <span class="copied-badge">Copied!</span> }
         </div>
       </div>
 
