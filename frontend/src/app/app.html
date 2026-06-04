@@ -41,7 +41,7 @@
       <div class="hero">
         <div class="avatar">{{ p.first_name[0] }}{{ p.last_name[0] }}</div>
         <div>
-          <div class="full-name">{{ p.first_name }} {{ p.middle_name }} {{ p.last_name }}</div>
+          <div class="full-name">{{ p.first_name }}{{ p.middle_name ? " " + p.middle_name : "" }} {{ p.last_name }}</div>
           <div class="dob">Born {{ p.date_of_birth }}</div>
         </div>
       </div>

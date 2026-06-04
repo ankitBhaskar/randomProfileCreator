@@ -8,7 +8,7 @@ from __future__ import annotations
 import random
 import secrets
 import string
-from datetime import date, timedelta
+from datetime import date
 from typing import TypedDict
 
 from faker import Faker
@@ -61,26 +61,33 @@ _STATE_POSTCODE_RANGES: dict[str, tuple[int, int]] = {
 }
 _STATES = list(_STATE_POSTCODE_RANGES.keys())
 
-_SUBURBS: list[str] = [
-    "Melbourne", "Sydney", "Brisbane", "Perth", "Adelaide",
-    "Hobart", "Gold Coast", "Newcastle", "Wollongong", "Geelong",
-    "Townsville", "Cairns", "Toowoomba", "Launceston", "Bendigo",
-    "Albury", "Ballarat", "Mandurah", "Bundaberg", "Rockhampton",
-    "Mackay", "Coffs Harbour", "Tamworth", "Gladstone", "Lismore",
-    "Bathurst", "Southport", "Broadbeach", "Moorabbin", "Coburg",
-    "Footscray", "Fitzroy", "Collingwood", "Brunswick", "Preston",
-    "Ringwood", "Frankston", "Dandenong", "Berwick", "Cranbourne",
-    "Traralgon", "Shepparton", "Warrnambool", "Echuca", "Wangaratta",
-    "Bairnsdale", "Sale", "Wonthaggi", "Seymour", "Gisborne",
-    "Daylesford", "Lilydale", "Belgrave", "Pakenham", "Beaconsfield",
-    "Drouin", "Warragul", "Morwell", "Armidale", "Dubbo",
-]
+_STATE_SUBURBS: dict[str, list[str]] = {
+    "NSW": ["Sydney", "Newcastle", "Wollongong", "Coffs Harbour", "Tamworth",
+            "Lismore", "Bathurst", "Armidale", "Dubbo", "Albury",
+            "Wagga Wagga", "Broken Hill", "Orange", "Griffith", "Nowra"],
+    "VIC": ["Melbourne", "Geelong", "Ballarat", "Bendigo", "Shepparton",
+            "Warrnambool", "Traralgon", "Echuca", "Wangaratta", "Moorabbin",
+            "Coburg", "Footscray", "Fitzroy", "Collingwood", "Brunswick",
+            "Preston", "Ringwood", "Frankston", "Dandenong", "Berwick",
+            "Cranbourne", "Sale", "Wonthaggi", "Pakenham", "Morwell"],
+    "QLD": ["Brisbane", "Gold Coast", "Townsville", "Cairns", "Toowoomba",
+            "Bundaberg", "Rockhampton", "Mackay", "Gladstone", "Southport",
+            "Broadbeach", "Ipswich", "Sunshine Coast", "Hervey Bay", "Biloela"],
+    "SA":  ["Adelaide", "Mount Gambier", "Whyalla", "Port Augusta", "Port Pirie",
+            "Victor Harbor", "Murray Bridge", "Gawler", "Port Lincoln", "Naracoorte"],
+    "WA":  ["Perth", "Mandurah", "Bunbury", "Geraldton", "Kalgoorlie",
+            "Albany", "Broome", "Karratha", "Port Hedland", "Fremantle"],
+    "TAS": ["Hobart", "Launceston", "Devonport", "Burnie", "Ulverstone",
+            "Queenstown", "Smithton", "St Helens", "Scottsdale", "Huonville"],
+}
 
 
-def _random_state_and_postcode() -> tuple[str, str]:
+def _random_state_postcode_suburb() -> tuple[str, str, str]:
     state = random.choice(_STATES)
     lo, hi = _STATE_POSTCODE_RANGES[state]
-    return state, str(random.randint(lo, hi))
+    postcode = str(random.randint(lo, hi))
+    suburb = random.choice(_STATE_SUBURBS[state])
+    return state, postcode, suburb
 
 
 def _random_address() -> str:
@@ -141,8 +148,7 @@ def generate_profile() -> AustralianProfile:
     first = fake.first_name()
     last = fake.last_name()
     middle = fake.first_name() if random.random() > 0.5 else ""
-    state, postcode = _random_state_and_postcode()
-    suburb = random.choice(_SUBURBS)
+    state, postcode, suburb = _random_state_postcode_suburb()
 
     return AustralianProfile(
         first_name=first,
