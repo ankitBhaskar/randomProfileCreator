@@ -39,9 +39,25 @@
       <!-- Avatar & name -->
       <div class="hero">
         <div class="avatar">{{ p.first_name[0] }}{{ p.last_name[0] }}</div>
-        <div>
-          <div class="full-name">{{ p.first_name }}{{ p.middle_name ? " " + p.middle_name : "" }} {{ p.last_name }}</div>
-          <div class="dob">Born {{ p.date_of_birth }}</div>
+      </div>
+
+      <!-- Personal -->
+      <div class="section-title">Personal Information</div>
+      <div class="field-grid">
+        <div class="field" (click)="copy(p.first_name, 'first_name')" title="Click to copy">
+          <span class="label">First Name</span>
+          <span class="value">{{ p.first_name }}</span>
+          @if (copiedField() === 'first_name') { <span class="copied-badge">Copied!</span> }
+        </div>
+        <div class="field" (click)="copy(p.last_name, 'last_name')" title="Click to copy">
+          <span class="label">Last Name</span>
+          <span class="value">{{ p.last_name }}</span>
+          @if (copiedField() === 'last_name') { <span class="copied-badge">Copied!</span> }
+        </div>
+        <div class="field" (click)="copy(p.date_of_birth, 'dob')" title="Click to copy">
+          <span class="label">Date of Birth</span>
+          <span class="value">{{ p.date_of_birth }}</span>
+          @if (copiedField() === 'dob') { <span class="copied-badge">Copied!</span> }
         </div>
       </div>
 
@@ -53,7 +69,6 @@
           <span class="value email-val">{{ p.email }}</span>
           @if (copiedField() === 'email') { <span class="copied-badge">Copied!</span> }
         </div>
-
       </div>
 
 
