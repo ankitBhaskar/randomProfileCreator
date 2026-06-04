@@ -15,6 +15,41 @@ from faker import Faker
 
 fake = Faker("en_AU")
 
+_FUN_FIRST_NAMES = [
+    # Fruits
+    "Mango", "Kiwi", "Papaya", "Lychee", "Guava", "Lemon", "Lime", "Peach",
+    "Plum", "Berry", "Cherry", "Olive", "Melon", "Fig", "Apricot", "Nectarine",
+    # Foods
+    "Peanut", "Waffle", "Pickle", "Noodle", "Biscuit", "Brownie", "Muffin",
+    "Pretzel", "Nacho", "Churro", "Taco", "Bagel", "Pancake", "Cookie", "Boba",
+    "Tofu", "Hummus", "Falafel", "Sushi", "Dumpling", "Ramen", "Pudding",
+    # Animals
+    "Dingo", "Wombat", "Quokka", "Gecko", "Falcon", "Otter", "Badger", "Moose",
+    "Koala", "Panda", "Cobra", "Viper", "Lynx", "Puffin", "Walrus", "Narwhal",
+    # Fun words
+    "Zigzag", "Wobble", "Breezy", "Cactus", "Sprocket", "Fizzy", "Doodle",
+    "Snappy", "Zesty", "Puddles", "Bingo", "Rascal", "Wiggles", "Tangle",
+]
+
+_FUN_LAST_NAMES = [
+    # Foods
+    "Butterscotch", "Crumble", "Biscotti", "Streusel", "Fritter",
+    "Shortcake", "Toffee", "Marmalade", "Chutney", "Cobbler", "Ganache",
+    # Animals
+    "Badger", "Mongoose", "Platypus", "Echidna", "Capybara",
+    "Armadillo", "Flamingo", "Pelican", "Penguin", "Wolverine", "Narwhal",
+    # Nature / fun
+    "Thundercloud", "Raindrop", "Tornado", "Snowflake", "Tumbleweed",
+    "Frostberry", "Moonpebble", "Sunspot", "Stardust",
+    "Riverrock", "Bramblethorn", "Swiftwind", "Brightleaf",
+    # Extra food
+    "Noodleberg", "Waffleton", "Pickleson", "Biscuitson", "Muffinsworth",
+]
+
+
+def _random_fun_name() -> tuple[str, str]:
+    return random.choice(_FUN_FIRST_NAMES), random.choice(_FUN_LAST_NAMES)
+
 
 class AustralianProfile(TypedDict):
     first_name: str
@@ -145,9 +180,8 @@ def _random_tfn() -> str:
 
 
 def generate_profile() -> AustralianProfile:
-    first = fake.first_name()
-    last = fake.last_name()
-    middle = fake.first_name() if random.random() > 0.5 else ""
+    first, last = _random_fun_name()
+    middle = random.choice(_FUN_FIRST_NAMES) if random.random() > 0.5 else ""
     state, postcode, suburb = _random_state_postcode_suburb()
 
     return AustralianProfile(
