@@ -13,7 +13,7 @@ HTML = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aussie Random Profile Generator</title>
+  <title>Random Profile Generator</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -42,7 +42,6 @@ HTML = """<!DOCTYPE html>
       text-align: center;
     }
 
-    .flag { font-size: 1.5rem; }
 
     .card {
       background: #fff;
@@ -168,7 +167,7 @@ HTML = """<!DOCTYPE html>
 </head>
 <body>
 
-  <h1><span class="flag">🇦🇺</span> Aussie Profile Generator</h1>
+  <h1>Profile Generator</h1>
   <p class="subtitle">Instant random Australian identity for testing &amp; demos</p>
 
   <div class="card" id="card">
