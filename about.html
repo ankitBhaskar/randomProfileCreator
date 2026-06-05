@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ink:     #111827;
+    --body:    #4B5563;
+    --muted:   #6B7280;
+    --subtle:  #9aa0b0;
+    --line:    rgba(0,0,0,0.06);
+    --bg:      rgb(238,234,248);
+    --surface: rgba(255,255,255,0.55);
+    --maxw:    1280px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--font); color: var(--body); -webkit-font-smoothing: antialiased; }
+
+  .section {
+    background: var(--bg);
+    border-bottom: 1px solid #f3f4f6;
+    padding: 5rem 1.25rem;
+  }
+
+  @media (min-width: 768px) { .section { padding: 7rem 4rem; } }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .wrap { grid-template-columns: 1fr 1fr; gap: 5rem; }
+  }
+
+  /* ── Left column ── */
+  .col { display: flex; flex-direction: column; gap: 1.75rem; }
+
+  .pill {
+    align-self: flex-start;
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid #d4cce8;
+    background: rgba(255,255,255,0.7);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+  }
+
+  .col h2 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+
+  .lede {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--body);
+  }
+
+  .lede strong { color: var(--ink); font-weight: 500; }
+
+  .hint { font-size: 0.875rem; color: var(--subtle); line-height: 1.5; }
+
+  /* ── Cards ── */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 0;
+  }
+
+  @media (min-width: 768px) { .cards { padding-top: 1rem; } }
+
+  .card {
+    position: relative;
+    border-radius: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface);
+    border: 0.5px solid var(--line);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: transform 0.2s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(124,111,205,0.3);
+    box-shadow: 0 8px 24px -8px rgba(124,111,205,0.25);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .icon-badge {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: box-shadow 0.3s;
+  }
+
+  .card:hover .icon-badge {
+    box-shadow: 0 4px 12px -2px rgba(0,0,0,0.25);
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) { .card h3 { font-size: 1.125rem; } }
+
+  .kw {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 0.75rem;
+  }
+
+  .kw span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.04);
+    color: var(--body);
+  }
+
+  /* ── expand body on hover ── */
+  .body {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s, margin 0.3s;
+  }
+
+  .card:hover .body,
+  .card:focus-within .body {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 0.75rem;
+  }
+
+  .body p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="wrap">
+
+    <!-- Left col -->
+    <div class="col">
+      <span class="pill">About Me</span>
+      <h2>Hello, I'm Harshita</h2>
+      <p class="lede">I am a <strong>Senior UX Designer</strong> with 6+ years across AI platforms, education, healthcare, government and IoT.</p>
+      <p class="lede">I turn complex problems into clear, accessible and scalable design through UX research, service design, systems thinking and AI interaction design.</p>
+      <p class="hint">Hover a card to open it.</p>
+    </div>
+
+    <!-- Right col — cards -->
+    <div class="cards" id="cards"></div>
+
+  </div>
+</section>
+
+<script>
+  const cards = [
+    {
+      t: "Systems thinking",
+      kw: ["ecosystems","workflows","services"],
+      d: "I design for the whole ecosystem, not just isolated touchpoints — mapping users, workflows and services to ensure consistency across digital products and physical services.",
+      color: "rgb(124,111,205)",
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>`
+    },
+    {
+      t: "Human-centred AI",
+      kw: ["transparency","explainability","control"],
+      d: "I design AI-enabled experiences that feel clear, transparent and trustworthy, with a focus on accessibility, explainability and human control.",
+      color: "rgb(76,29,149)",
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`
+    },
+    {
+      t: "Rapid prototyping",
+      kw: ["Figma","AI workflows","systems"],
+      d: "I turn ideas into testable prototypes using Figma, AI-assisted workflows and reusable design systems.",
+      color: "rgb(255,184,0)",
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`
+    },
+    {
+      t: "What I solve",
+      kw: ["complexity","fragmentation","trust gaps"],
+      d: "Complex services, unclear workflows, fragmented digital and physical touchpoints, cognitive overload and trust gaps.",
+      color: "rgb(6,95,70)",
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`
+    },
+    {
+      t: "What I've achieved",
+      kw: ["AI audits","conversational AI","award-recognised"],
+      d: "AI audits, conversational AI redesigns, reusable design systems, award-recognised service design work, physical service concepts and cross-sector digital products.",
+      color: "rgb(0,0,84)",
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></svg>`
+    }
+  ];
+
+  const host = document.getElementById("cards");
+
+  cards.forEach(function(c) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.innerHTML =
+      `<div class="head">
+        <span class="icon-badge" style="background:${c.color}" aria-hidden="true">${c.icon}</span>
+        <h3>${c.t}</h3>
+      </div>
+      <div class="body"><p>${c.d}</p></div>
+      <div class="kw">${c.kw.map(k => `<span>${k}</span>`).join("")}</div>`;
+    host.appendChild(el);
+  });
+</script>
+</body>
+</html>
