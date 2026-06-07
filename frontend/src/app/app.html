@@ -14,6 +14,11 @@
       <span class="icon" [class.spin]="loading()">↻</span>
       {{ loading() ? 'Generating…' : 'New Profile' }}
     </button>
+    @if (profile()) {
+      <button class="btn-download" (click)="downloadProfile()" title="Download current profile as JSON">
+        ↓ Download Profile
+      </button>
+    }
   </div>
 
   <!-- Error -->
@@ -71,7 +76,6 @@
         </div>
       </div>
 
-
       <!-- Identity -->
       <div class="section-title">Identity Documents</div>
       <div class="field-grid">
@@ -95,6 +99,51 @@
       <p class="copy-hint">Click any field to copy its value</p>
     </div>
   }
+
+  <!-- Bulk CSV Download -->
+  <div class="card bulk-card">
+    <div class="bulk-header">
+      <div class="bulk-icon">⬇</div>
+      <div>
+        <div class="bulk-title">Bulk Employee CSV</div>
+        <div class="bulk-sub">Download up to 5,000 employee records as a CSV file</div>
+      </div>
+    </div>
+
+    <div class="bulk-controls">
+      <div class="count-input-wrap">
+        <label class="label" for="bulkCount">Number of records</label>
+        <input
+          id="bulkCount"
+          type="number"
+          class="count-input"
+          [(ngModel)]="bulkCount"
+          min="1"
+          max="5000"
+          placeholder="100"
+        />
+      </div>
+      <button class="btn-bulk" (click)="downloadBulkCSV()" [disabled]="bulkDownloading()">
+        @if (bulkDownloading()) {
+          <span class="icon spin">↻</span> Generating…
+        } @else {
+          ↓ Download CSV
+        }
+      </button>
+    </div>
+
+    @if (bulkError()) {
+      <div class="error-box" style="margin-top:0.75rem">
+        ⚠️ Failed to generate CSV. Please try again.
+      </div>
+    }
+
+    <p class="bulk-hint">
+      Columns: worker_reference_id, payroll_id, family_name, first_name, middle_name,
+      date_of_birth, email, phone_number, address, suburb, postcode, state, country,
+      employment_start_date, employment_end_date
+    </p>
+  </div>
 
   <!-- Disclaimer -->
   <div class="disclaimer">

@@ -199,3 +199,116 @@ h1 {
   .field.full { grid-column: 1; }
   .card { padding: 1.25rem; }
 }
+
+/* ── Action bar ── */
+.action-bar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-download {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  color: #2b6cb0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid #2b6cb0;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-download:hover { background: #ebf8ff; }
+
+/* ── Bulk card ── */
+.bulk-card {
+  margin-top: 1.5rem;
+}
+
+.bulk-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.bulk-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3182ce, #2b6cb0);
+  color: #fff;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bulk-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.bulk-sub {
+  font-size: 0.8rem;
+  color: #718096;
+  margin-top: 0.1rem;
+}
+
+.bulk-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.count-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.count-input {
+  width: 140px;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #1a202c;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.count-input:focus { border-color: #3182ce; }
+
+.btn-bulk {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.4rem;
+  background: linear-gradient(135deg, #3182ce, #2b6cb0);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn-bulk:hover:not(:disabled) { opacity: 0.9; }
+.btn-bulk:active:not(:disabled) { transform: scale(0.97); }
+.btn-bulk:disabled { opacity: 0.6; cursor: default; }
+
+.bulk-hint {
+  margin-top: 0.85rem;
+  font-size: 0.72rem;
+  color: #a0aec0;
+  line-height: 1.6;
+}

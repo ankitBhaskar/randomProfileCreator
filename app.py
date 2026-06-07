@@ -2,8 +2,12 @@
 
 import os
 
-from flask import Flask, jsonify, render_template_string
+import csv
+import io
 
+from flask import Flask, Response, jsonify, render_template_string, request
+
+from employee_generator import CSV_HEADERS, random_employee
 from profile_generator import generate_profile
 
 app = Flask(__name__)
@@ -289,6 +293,24 @@ def index():
 @app.route("/api/profile")
 def api_profile():
     return jsonify(generate_profile())
+
+
+@app.route("/api/employees")
+def api_employees():
+    try:
+        count = max(1, min(5000, int(request.args.get("count", 10))))
+    except (ValueError, TypeError):
+        count = 10
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=CSV_HEADERS)
+    writer.writeheader()
+    for _ in range(count):
+        writer.writerow(random_employee())
+    return Response(
+        buf.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="employees_{count}.csv"'},
+    )
 
 
 if __name__ == "__main__":
