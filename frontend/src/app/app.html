@@ -36,6 +36,49 @@
       </div>
     </header>
 
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn" [class.active]="activeTab() === 'generator'" (click)="switchTab('generator')">Generator</button>
+      <button class="tab-btn" [class.active]="activeTab() === 'history'" (click)="switchTab('history')">My Activity</button>
+    </div>
+
+    @if (activeTab() === 'history') {
+      <div class="card history-card">
+        <div class="section-title">My Activity</div>
+
+        @if (auth.user$ | async; as user) {
+          <div class="history-meta">
+            <div class="history-meta-row">
+              <span class="label">Signed in as</span>
+              <span class="value">{{ user.name }} ({{ user.email }})</span>
+            </div>
+          </div>
+        }
+
+        <div class="section-title" style="margin-top:1.25rem">Download History</div>
+
+        @if (historyLoading()) {
+          <div class="history-empty">Loading…</div>
+        } @else if (downloads().length === 0) {
+          <div class="history-empty">No downloads yet. Generate a profile or download a CSV to get started.</div>
+        } @else {
+          <div class="history-list">
+            @for (d of downloads(); track d.id) {
+              <div class="history-item">
+                <span class="history-icon">{{ d.type === 'bulk_csv' ? '📋' : '👤' }}</span>
+                <div class="history-info">
+                  <span class="history-label">{{ d.type === 'bulk_csv' ? 'Bulk CSV — ' + d.label : 'Profile JSON — ' + d.label }}</span>
+                  <span class="history-time">{{ d.timestamp | date:'dd MMM yyyy, h:mm a' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'generator') {
+
     <!-- Action bar -->
     <div class="action-bar">
       <button class="btn-refresh" (click)="refresh()" [disabled]="loading()">
@@ -168,6 +211,8 @@
         employment_start_date, employment_end_date
       </p>
     </div>
+
+    } <!-- end generator tab -->
 
     <!-- Disclaimer -->
     <div class="disclaimer">

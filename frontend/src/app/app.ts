@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from './profile.service';
 import { AuthService } from './auth.service';
+import { HistoryService, DownloadRecord } from './history.service';
 import { Profile } from './profile.model';
 
 @Component({
@@ -15,6 +16,7 @@ import { Profile } from './profile.model';
 export class App implements OnInit {
   private profileService = inject(ProfileService);
   private http = inject(HttpClient);
+  private historyService = inject(HistoryService);
   readonly auth = inject(AuthService);
 
   profile = signal<Profile | null>(null);
@@ -27,6 +29,10 @@ export class App implements OnInit {
   bulkError = signal(false);
 
   signingIn = signal(false);
+
+  activeTab = signal<'generator' | 'history'>('generator');
+  downloads = signal<DownloadRecord[]>([]);
+  historyLoading = signal(false);
 
   ngOnInit() {
     this.refresh();
@@ -53,6 +59,7 @@ export class App implements OnInit {
     if (!p) return;
     const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
     this._triggerDownload(blob, `profile_${p.first_name}_${p.last_name}.json`);
+    this.historyService.recordDownload('profile_json', `${p.first_name} ${p.last_name}`);
   }
 
   downloadBulkCSV() {
@@ -63,6 +70,7 @@ export class App implements OnInit {
       next: (blob) => {
         this._triggerDownload(blob, `employees_${count}.csv`);
         this.bulkDownloading.set(false);
+        this.historyService.recordDownload('bulk_csv', `${count} records`);
       },
       error: () => { this.bulkError.set(true); this.bulkDownloading.set(false); }
     });
@@ -79,6 +87,15 @@ export class App implements OnInit {
 
   signOut() {
     this.auth.signOut();
+  }
+
+  async switchTab(tab: 'generator' | 'history') {
+    this.activeTab.set(tab);
+    if (tab === 'history') {
+      this.historyLoading.set(true);
+      this.downloads.set(await this.historyService.getDownloads());
+      this.historyLoading.set(false);
+    }
   }
 
   private _triggerDownload(blob: Blob, filename: string) {

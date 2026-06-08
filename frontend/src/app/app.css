@@ -455,3 +455,96 @@ h1 {
   color: #a0aec0;
   margin: 0;
 }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  background: #e2e8f0;
+  border-radius: 0.65rem;
+  padding: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #718096;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.tab-btn.active {
+  background: #fff;
+  color: #2b6cb0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ── History card ── */
+.history-card { margin-bottom: 1.5rem; }
+
+.history-meta {
+  background: #f7fafc;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.history-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.history-empty {
+  font-size: 0.88rem;
+  color: #a0aec0;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background: #f7fafc;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.history-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.history-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #1a202c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-time {
+  font-size: 0.75rem;
+  color: #a0aec0;
+}

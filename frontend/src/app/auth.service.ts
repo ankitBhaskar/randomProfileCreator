@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, GoogleAuthProvider, signInWithPopup, signOut, user } from '@angular/fire/auth';
-import { doc, Firestore, getDoc, setDoc, serverTimestamp } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, serverTimestamp, Timestamp } from '@angular/fire/firestore';
 import { from, Observable, switchMap, of } from 'rxjs';
 
 export interface AppUser {
@@ -48,7 +48,11 @@ export class AuthService {
         email: firebaseUser.email,
         photoURL: firebaseUser.photoURL,
         createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
       });
+    } else {
+      const { updateDoc } = await import('@angular/fire/firestore');
+      await updateDoc(ref, { lastLoginAt: serverTimestamp() });
     }
   }
 }
