@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from './profile.service';
+import { AuthService } from './auth.service';
 import { Profile } from './profile.model';
 
 @Component({
@@ -14,6 +15,7 @@ import { Profile } from './profile.model';
 export class App implements OnInit {
   private profileService = inject(ProfileService);
   private http = inject(HttpClient);
+  readonly auth = inject(AuthService);
 
   profile = signal<Profile | null>(null);
   loading = signal(false);
@@ -23,6 +25,8 @@ export class App implements OnInit {
   bulkCount = 100;
   bulkDownloading = signal(false);
   bulkError = signal(false);
+
+  signingIn = signal(false);
 
   ngOnInit() {
     this.refresh();
@@ -62,6 +66,19 @@ export class App implements OnInit {
       },
       error: () => { this.bulkError.set(true); this.bulkDownloading.set(false); }
     });
+  }
+
+  async signIn() {
+    this.signingIn.set(true);
+    try {
+      await this.auth.signInWithGoogle();
+    } finally {
+      this.signingIn.set(false);
+    }
+  }
+
+  signOut() {
+    this.auth.signOut();
   }
 
   private _triggerDownload(blob: Blob, filename: string) {

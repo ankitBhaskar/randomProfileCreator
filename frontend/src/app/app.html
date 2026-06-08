@@ -1,154 +1,202 @@
-<div class="page">
-
-  <!-- Header -->
-  <header>
-    <div>
-      <h1>Profile Generator</h1>
-      <p class="subtitle">Random fictional Australian identities for testing &amp; demos</p>
+<!-- ── Auth bar (always visible at top) ── -->
+<div class="auth-bar">
+  @if (auth.user$ | async; as user) {
+    <div class="auth-user">
+      @if (user.photoURL) {
+        <img class="auth-avatar" [src]="user.photoURL" [alt]="user.name || 'User'" referrerpolicy="no-referrer" />
+      }
+      <span class="auth-name">{{ user.name }}</span>
     </div>
-  </header>
-
-  <!-- Action bar -->
-  <div class="action-bar">
-    <button class="btn-refresh" (click)="refresh()" [disabled]="loading()">
-      <span class="icon" [class.spin]="loading()">↻</span>
-      {{ loading() ? 'Generating…' : 'New Profile' }}
+    <button class="btn-signout" (click)="signOut()">Sign out</button>
+  } @else {
+    <span class="auth-brand">Profile Generator</span>
+    <button class="btn-signin" (click)="signIn()" [disabled]="signingIn()">
+      <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        <path fill="none" d="M0 0h48v48H0z"/>
+      </svg>
+      {{ signingIn() ? 'Signing in…' : 'Sign in with Google' }}
     </button>
-    @if (profile()) {
-      <button class="btn-download" (click)="downloadProfile()" title="Download current profile as JSON">
-        ↓ Download Profile
-      </button>
-    }
-  </div>
-
-  <!-- Error -->
-  @if (error()) {
-    <div class="error-box">
-      ⚠️ Could not reach the API. Make sure the Flask server is running on port 5000.
-    </div>
   }
+</div>
 
-  <!-- Skeleton while loading initial -->
-  @if (loading() && !profile()) {
-    <div class="card skeleton-card">
-      @for (i of [1,2,3,4,5,6]; track i) {
-        <div class="skeleton-line"></div>
+<!-- ── Main app (gated behind auth) ── -->
+@if (auth.user$ | async) {
+
+  <div class="page">
+
+    <!-- Header -->
+    <header>
+      <div>
+        <h1>Profile Generator</h1>
+        <p class="subtitle">Random fictional Australian identities for testing &amp; demos</p>
+      </div>
+    </header>
+
+    <!-- Action bar -->
+    <div class="action-bar">
+      <button class="btn-refresh" (click)="refresh()" [disabled]="loading()">
+        <span class="icon" [class.spin]="loading()">↻</span>
+        {{ loading() ? 'Generating…' : 'New Profile' }}
+      </button>
+      @if (profile()) {
+        <button class="btn-download" (click)="downloadProfile()" title="Download current profile as JSON">
+          ↓ Download Profile
+        </button>
       }
     </div>
-  }
 
-  <!-- Profile card -->
-  @if (profile(); as p) {
-    <div class="card" [class.fading]="loading()">
-
-      <!-- Avatar & name -->
-      <div class="hero">
-        <div class="avatar">{{ p.first_name[0] }}{{ p.last_name[0] }}</div>
-      </div>
-
-      <!-- Personal -->
-      <div class="section-title">Personal Information</div>
-      <div class="field-grid">
-        <div class="field" (click)="copy(p.first_name, 'first_name')" title="Click to copy">
-          <span class="label">First Name</span>
-          <span class="value">{{ p.first_name }}</span>
-          @if (copiedField() === 'first_name') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.last_name, 'last_name')" title="Click to copy">
-          <span class="label">Last Name</span>
-          <span class="value">{{ p.last_name }}</span>
-          @if (copiedField() === 'last_name') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.date_of_birth, 'dob')" title="Click to copy">
-          <span class="label">Date of Birth</span>
-          <span class="value">{{ p.date_of_birth }}</span>
-          @if (copiedField() === 'dob') { <span class="copied-badge">Copied!</span> }
-        </div>
-      </div>
-
-      <!-- Contact -->
-      <div class="section-title">Contact</div>
-      <div class="field-grid">
-        <div class="field full" (click)="copy(p.email, 'email')" title="Click to copy">
-          <span class="label">Email</span>
-          <span class="value email-val">{{ p.email }}</span>
-          @if (copiedField() === 'email') { <span class="copied-badge">Copied!</span> }
-        </div>
-      </div>
-
-      <!-- Identity -->
-      <div class="section-title">Identity Documents</div>
-      <div class="field-grid">
-        <div class="field" (click)="copy(p.passport_number, 'passport')" title="Click to copy">
-          <span class="label">🛂 Passport</span>
-          <span class="value mono">{{ p.passport_number }}</span>
-          @if (copiedField() === 'passport') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.drivers_licence, 'licence')" title="Click to copy">
-          <span class="label">🚗 Driver's Licence</span>
-          <span class="value mono">{{ p.drivers_licence }}</span>
-          @if (copiedField() === 'licence') { <span class="copied-badge">Copied!</span> }
-        </div>
-        <div class="field" (click)="copy(p.medicare_number, 'medicare')" title="Click to copy">
-          <span class="label">🏥 Medicare</span>
-          <span class="value mono">{{ p.medicare_number }}</span>
-          @if (copiedField() === 'medicare') { <span class="copied-badge">Copied!</span> }
-        </div>
-      </div>
-
-      <p class="copy-hint">Click any field to copy its value</p>
-    </div>
-  }
-
-  <!-- Bulk CSV Download -->
-  <div class="card bulk-card">
-    <div class="bulk-header">
-      <div class="bulk-icon">⬇</div>
-      <div>
-        <div class="bulk-title">Bulk Employee CSV</div>
-        <div class="bulk-sub">Download up to 5,000 employee records as a CSV file</div>
-      </div>
-    </div>
-
-    <div class="bulk-controls">
-      <div class="count-input-wrap">
-        <label class="label" for="bulkCount">Number of records</label>
-        <input
-          id="bulkCount"
-          type="number"
-          class="count-input"
-          [(ngModel)]="bulkCount"
-          min="1"
-          max="5000"
-          placeholder="100"
-        />
-      </div>
-      <button class="btn-bulk" (click)="downloadBulkCSV()" [disabled]="bulkDownloading()">
-        @if (bulkDownloading()) {
-          <span class="icon spin">↻</span> Generating…
-        } @else {
-          ↓ Download CSV
-        }
-      </button>
-    </div>
-
-    @if (bulkError()) {
-      <div class="error-box" style="margin-top:0.75rem">
-        ⚠️ Failed to generate CSV. Please try again.
+    <!-- Error -->
+    @if (error()) {
+      <div class="error-box">
+        ⚠️ Could not reach the API. Make sure the Flask server is running on port 5000.
       </div>
     }
 
-    <p class="bulk-hint">
-      Columns: worker_reference_id, payroll_id, family_name, first_name, middle_name,
-      date_of_birth, email, phone_number, address, suburb, postcode, state, country,
-      employment_start_date, employment_end_date
-    </p>
+    <!-- Skeleton -->
+    @if (loading() && !profile()) {
+      <div class="card skeleton-card">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="skeleton-line"></div>
+        }
+      </div>
+    }
+
+    <!-- Profile card -->
+    @if (profile(); as p) {
+      <div class="card" [class.fading]="loading()">
+
+        <div class="hero">
+          <div class="avatar">{{ p.first_name[0] }}{{ p.last_name[0] }}</div>
+        </div>
+
+        <div class="section-title">Personal Information</div>
+        <div class="field-grid">
+          <div class="field" (click)="copy(p.first_name, 'first_name')" title="Click to copy">
+            <span class="label">First Name</span>
+            <span class="value">{{ p.first_name }}</span>
+            @if (copiedField() === 'first_name') { <span class="copied-badge">Copied!</span> }
+          </div>
+          <div class="field" (click)="copy(p.last_name, 'last_name')" title="Click to copy">
+            <span class="label">Last Name</span>
+            <span class="value">{{ p.last_name }}</span>
+            @if (copiedField() === 'last_name') { <span class="copied-badge">Copied!</span> }
+          </div>
+          <div class="field" (click)="copy(p.date_of_birth, 'dob')" title="Click to copy">
+            <span class="label">Date of Birth</span>
+            <span class="value">{{ p.date_of_birth }}</span>
+            @if (copiedField() === 'dob') { <span class="copied-badge">Copied!</span> }
+          </div>
+        </div>
+
+        <div class="section-title">Contact</div>
+        <div class="field-grid">
+          <div class="field full" (click)="copy(p.email, 'email')" title="Click to copy">
+            <span class="label">Email</span>
+            <span class="value email-val">{{ p.email }}</span>
+            @if (copiedField() === 'email') { <span class="copied-badge">Copied!</span> }
+          </div>
+        </div>
+
+        <div class="section-title">Identity Documents</div>
+        <div class="field-grid">
+          <div class="field" (click)="copy(p.passport_number, 'passport')" title="Click to copy">
+            <span class="label">🛂 Passport</span>
+            <span class="value mono">{{ p.passport_number }}</span>
+            @if (copiedField() === 'passport') { <span class="copied-badge">Copied!</span> }
+          </div>
+          <div class="field" (click)="copy(p.drivers_licence, 'licence')" title="Click to copy">
+            <span class="label">🚗 Driver's Licence</span>
+            <span class="value mono">{{ p.drivers_licence }}</span>
+            @if (copiedField() === 'licence') { <span class="copied-badge">Copied!</span> }
+          </div>
+          <div class="field" (click)="copy(p.medicare_number, 'medicare')" title="Click to copy">
+            <span class="label">🏥 Medicare</span>
+            <span class="value mono">{{ p.medicare_number }}</span>
+            @if (copiedField() === 'medicare') { <span class="copied-badge">Copied!</span> }
+          </div>
+        </div>
+
+        <p class="copy-hint">Click any field to copy its value</p>
+      </div>
+    }
+
+    <!-- Bulk CSV Download -->
+    <div class="card bulk-card">
+      <div class="bulk-header">
+        <div class="bulk-icon">⬇</div>
+        <div>
+          <div class="bulk-title">Bulk Employee CSV</div>
+          <div class="bulk-sub">Download up to 5,000 employee records as a CSV file</div>
+        </div>
+      </div>
+
+      <div class="bulk-controls">
+        <div class="count-input-wrap">
+          <label class="label" for="bulkCount">Number of records</label>
+          <input
+            id="bulkCount"
+            type="number"
+            class="count-input"
+            [(ngModel)]="bulkCount"
+            min="1"
+            max="5000"
+            placeholder="100"
+          />
+        </div>
+        <button class="btn-bulk" (click)="downloadBulkCSV()" [disabled]="bulkDownloading()">
+          @if (bulkDownloading()) {
+            <span class="icon spin">↻</span> Generating…
+          } @else {
+            ↓ Download CSV
+          }
+        </button>
+      </div>
+
+      @if (bulkError()) {
+        <div class="error-box" style="margin-top:0.75rem">
+          ⚠️ Failed to generate CSV. Please try again.
+        </div>
+      }
+
+      <p class="bulk-hint">
+        Columns: worker_reference_id, payroll_id, family_name, first_name, middle_name,
+        date_of_birth, email, phone_number, address, suburb, postcode, state, country,
+        employment_start_date, employment_end_date
+      </p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <strong>⚠️ Disclaimer:</strong> All profiles are entirely <strong>fictional and randomly generated</strong>.
+      No real person is represented. For software testing and demo use only.
+    </div>
+
   </div>
 
-  <!-- Disclaimer -->
-  <div class="disclaimer">
-    <strong>⚠️ Disclaimer:</strong> All profiles are entirely <strong>fictional and randomly generated</strong>.
-    No real person is represented. For software testing and demo use only.
+} @else {
+
+  <!-- Login landing page -->
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-logo">🎲</div>
+      <h1 class="login-title">Profile Generator</h1>
+      <p class="login-sub">Random fictional Australian identities for testing &amp; demos</p>
+      <button class="btn-signin-large" (click)="signIn()" [disabled]="signingIn()">
+        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        {{ signingIn() ? 'Signing in…' : 'Sign in with Google' }}
+      </button>
+      <p class="login-disclaimer">For authorised users only. All generated data is fictional.</p>
+    </div>
   </div>
 
-</div>
+}
