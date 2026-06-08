@@ -202,7 +202,7 @@ h1 {
 .btn-download:hover { background: rgba(124,111,205,0.07); border-color: rgba(124,111,205,0.6); }
 
 /* ── Spinner ── */
-.icon { font-size: 1.1rem; display: inline-block; }
+.btn-icon { display: inline-block; flex-shrink: 0; }
 .spin { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -487,7 +487,17 @@ h1 {
 }
 .history-item:hover { background: #F0EDF9; }
 
-.history-icon { font-size: 1rem; flex-shrink: 0; }
+.history-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F0EDF9;
+  border-radius: 0.5rem;
+  color: #7C6FCD;
+}
 
 .history-info {
   display: flex;
@@ -538,8 +548,13 @@ h1 {
 }
 
 .login-logo {
-  font-size: 2.75rem;
-  line-height: 1;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F0EDF9;
+  border-radius: 1rem;
   margin-bottom: 0.25rem;
 }
 
