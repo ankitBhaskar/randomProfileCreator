@@ -15,11 +15,11 @@ from faker import Faker
 fake = Faker("en_AU")
 
 CSV_HEADERS = [
-    "worker_reference_id", "payroll_id", "family_name", "first_name",
-    "middle_name", "date_of_birth", "email", "phone_number",
-    "address_line_1", "address_line_2", "address_line_3",
-    "suburb", "postcode", "state", "country",
-    "employment_start_date", "employment_end_date",
+    "LSC worker reference ID", "Payroll ID", "Family name", "First name",
+    "Middle name", "Date of birth", "Email", "Phone number",
+    "Address line 1", "Address line 2", "Address line 3",
+    "Suburb", "Postcode", "State", "Country",
+    "Employment start date", "Employment end date",
 ]
 
 
@@ -41,6 +41,28 @@ class EmployeeRecord(TypedDict):
     country: str
     employment_start_date: str
     employment_end_date: str
+
+
+# Maps internal TypedDict keys → CSV header names
+_FIELD_MAP = {
+    "worker_reference_id": "LSC worker reference ID",
+    "payroll_id": "Payroll ID",
+    "family_name": "Family name",
+    "first_name": "First name",
+    "middle_name": "Middle name",
+    "date_of_birth": "Date of birth",
+    "email": "Email",
+    "phone_number": "Phone number",
+    "address_line_1": "Address line 1",
+    "address_line_2": "Address line 2",
+    "address_line_3": "Address line 3",
+    "suburb": "Suburb",
+    "postcode": "Postcode",
+    "state": "State",
+    "country": "Country",
+    "employment_start_date": "Employment start date",
+    "employment_end_date": "Employment end date",
+}
 
 
 def _fmt(d: date) -> str:
@@ -104,11 +126,11 @@ def _random_state_postcode() -> tuple[str, str]:
     return state, str(random.randint(lo, hi))
 
 
-def random_employee() -> EmployeeRecord:
+def random_employee() -> dict:
     first = fake.first_name()
     last = fake.last_name()
     state, postcode = _random_state_postcode()
-    return EmployeeRecord(
+    record = EmployeeRecord(
         worker_reference_id="",
         payroll_id=_random_payroll_id(),
         family_name=last,
@@ -127,3 +149,4 @@ def random_employee() -> EmployeeRecord:
         employment_start_date=_fmt(_random_employment_start()),
         employment_end_date="",
     )
+    return {_FIELD_MAP[k]: v for k, v in record.items()}
