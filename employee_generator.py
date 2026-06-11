@@ -91,7 +91,10 @@ def _random_phone() -> str:
 
 def _random_email(first: str, last: str) -> str:
     suffix = secrets.token_hex(4)
-    return f"no_mfa_{first.lower()}_{last.lower()}_{suffix}@yopmail.com"
+    # Total max 35 chars: "no_mfa_" (7) + name + "_" + suffix (8) + "@yopmail.com" (12) = 28 + name
+    max_name = 35 - 28  # 7 chars for the name portion
+    name_part = (first.lower() + "_" + last.lower())[:max_name]
+    return f"no_mfa_{name_part}_{suffix}@yopmail.com"
 
 
 _STATE_POSTCODE_RANGES: dict[str, tuple[int, int]] = {
